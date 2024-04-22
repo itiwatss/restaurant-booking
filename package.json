@@ -19,6 +19,7 @@
     "@types/react-dom": "^18.2.19",
     "axios": "^1.6.7",
     "dayjs": "^1.11.10",
+    "dayjs-ext": "^2.2.0",
     "formik": "^2.4.5",
     "lodash": "^4.17.21",
     "react": "^18.2.0",

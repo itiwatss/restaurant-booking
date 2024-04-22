@@ -16,7 +16,7 @@ export default function RestaurantCard({ data }: CartDrawerProps) {
       }}
     >
       <Stack direction={{ xs: "column", md: "row" }}>
-        <img src={data.photos[0]} alt="" width={"100%"} height={200} />
+        <img src={data.photos[0]} alt="" height={200} />
         <Stack
           direction={"column"}
           justifyContent={"space-between"}

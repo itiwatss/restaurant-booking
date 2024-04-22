@@ -24,12 +24,14 @@ export default function BookingHistory() {
     localStorage.setItem("bookingList", JSON.stringify(newBookingHistory));
     refreshPage();
   };
+
   useEffect(() => {
     const cartLocalStorage = JSON.parse(
       localStorage.getItem("bookingList") || "[]"
     );
     setBookingHistory(cartLocalStorage);
   }, []);
+
   return (
     <Stack
       direction={"column"}
@@ -51,58 +53,65 @@ export default function BookingHistory() {
             }}
           >
             <Stack
-              direction={"row"}
+              direction={{ xs: "column", md: "row" }}
               justifyContent={"space-between"}
-              alignItems={"center"}
+              alignItems={{ xs: "flex-start", md: "center" }}
             >
-              <img
-                src={"https://picsum.photos/300"}
-                alt=""
-                width={200}
-                height={200}
-              />
-              <Stack
-                direction={"column"}
-                justifyContent={"space-between"}
-                spacing={1}
-                p={2}
-                sx={{
-                  width: "100%",
-                }}
-              >
+              <Stack direction={{ xs: "column", md: "row" }} sx={{
+                width: '100%'
+              }}>
+                <img
+                  src={"https://picsum.photos/300"}
+                  alt=""
+                  height={200}
+                />
                 <Stack
                   direction={"column"}
-                  alignItems={"flex-start"}
+                  justifyContent={"space-between"}
                   spacing={1}
+                  p={2}
                 >
-                  <Link
-                    component="button"
-                    variant="body1"
-                    sx={{
-                      color: "black",
-                    }}
+                  <Stack
+                    direction={"column"}
+                    alignItems={"flex-start"}
+                    spacing={1}
                   >
-                    {e.name}
-                  </Link>
-                  <Typography variant="body1">
-                    Name: {e.booking?.name}
-                  </Typography>
-                  <Typography variant="body1">
-                    Table size:{" "}
-                    {e.booking?.size === 4
-                      ? `${e.booking?.size}+`
-                      : e.booking?.size}{" "}
-                    people
-                  </Typography>
-                  <Typography variant="body1">
-                    Date: {dayjs(e.booking?.dateTime).format("DD/MM/YYYY")}
-                  </Typography>
-                  <Typography variant="body1">
-                    Time: {dayjs(e.booking?.dateTime).format("HH:mm")}
-                  </Typography>
+                    <Link
+                      component="button"
+                      variant="body1"
+                      sx={{
+                        color: "black",
+                        fontWeight: 600,
+                      }}
+                    >
+                      {e.name}
+                    </Link>
+                    <Typography variant="body1">
+                      Name: {e.booking?.name}
+                    </Typography>
+                    <Typography variant="body1">
+                      Table size:{" "}
+                      {e.booking?.size === 4
+                        ? `${e.booking?.size}+`
+                        : e.booking?.size}{" "}
+                      people
+                    </Typography>
+                    <Typography variant="body1">
+                      Date: {dayjs(e.booking?.dateTime).format("DD/MM/YYYY")}
+                    </Typography>
+                    <Typography variant="body1">
+                      Time: {dayjs(e.booking?.dateTime).format("HH:mm")}
+                    </Typography>
+                  </Stack>
                 </Stack>
               </Stack>
-              <Stack direction={"row"} pr={2}>
+
+              <Stack
+                direction={"row"}
+                pl={{ xs: 2, md: 0 }}
+                pb={{ xs: 2, md: 0 }}
+                pr={{ xs: 0, md: 2 }}
+              >
                 <Button
                   variant="outlined"
                   onClick={() => handleDelete(e)}
@@ -120,7 +129,7 @@ export default function BookingHistory() {
                 >
                   <DeleteIcon
                     sx={{
-                      fontSize: "32px",
+                      fontSize: { xs: "24px", md: "32px" },
                       color: "black",
                     }}
                   />

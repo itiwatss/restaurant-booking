@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { useNavigate } from "react-router-dom";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -38,6 +38,10 @@ export default function Booking() {
   };
 
   const handleSubmit = () => {
+    const dateTime = date
+      ?.set("hour", dayjs(time, "HH:mm").hour())
+      ?.set("minute", dayjs(time, "HH:mm").minute());
+
     const cartLocalStorage = JSON.parse(
       localStorage.getItem("bookingList") || "[]"
     );
@@ -47,11 +51,11 @@ export default function Booking() {
       booking: {
         name: name,
         size: quantity,
-        dateTime: date?.toDate(),
+        dateTime: dateTime,
       },
     });
     localStorage.setItem("bookingList", JSON.stringify(cartLocalStorage));
-    navigate("/booking-history");
+    navigate(`/restaurant/${selected?.id}`);
     setOpen(false);
   };
 
@@ -191,11 +195,11 @@ export default function Booking() {
             value={time}
             onChange={handleChange}
           >
-            <MenuItem value={"12.00"}>12:00</MenuItem>
-            <MenuItem value={"13.00"}>13:00</MenuItem>
-            <MenuItem value={"14.00"}>14:00</MenuItem>
-            <MenuItem value={"15.00"}>15:00</MenuItem>
-            <MenuItem value={"16.00"}>16:00</MenuItem>
+            <MenuItem value={"12:00"}>12:00</MenuItem>
+            <MenuItem value={"13:00"}>13:00</MenuItem>
+            <MenuItem value={"14:00"}>14:00</MenuItem>
+            <MenuItem value={"15:00"}>15:00</MenuItem>
+            <MenuItem value={"16:00"}>16:00</MenuItem>
           </Select>
         </FormControl>
       </Stack>
