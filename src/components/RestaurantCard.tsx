@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { RestaurantType } from "../utils/type";
 
 interface CartDrawerProps {
-    data: RestaurantType
-  }
+  data: RestaurantType;
+}
 
 export default function RestaurantCard({ data }: CartDrawerProps) {
   const navigate = useNavigate();
@@ -15,7 +15,7 @@ export default function RestaurantCard({ data }: CartDrawerProps) {
         border: "1px solid black",
       }}
     >
-      <Stack direction={"row"}>
+      <Stack direction={{ xs: "column", md: "row" }}>
         <img src={data.photos[0]} alt="" width={200} height={200} />
         <Stack
           direction={"column"}

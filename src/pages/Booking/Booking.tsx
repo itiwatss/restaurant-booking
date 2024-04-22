@@ -42,6 +42,7 @@ export default function Booking() {
       localStorage.getItem("bookingList") || "[]"
     );
     cartLocalStorage.push({
+      id: cartLocalStorage.length + 1,
       name: selected?.name,
       booking: {
         name: name,
@@ -50,9 +51,7 @@ export default function Booking() {
       },
     });
     localStorage.setItem("bookingList", JSON.stringify(cartLocalStorage));
-
-    console.log("🚀 ~ handleSubmit ~ cartLocalStorage:", cartLocalStorage);
-    navigate("/");
+    navigate("/booking-history");
     setOpen(false);
   };
 

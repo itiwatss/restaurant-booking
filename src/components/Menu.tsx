@@ -1,20 +1,10 @@
 "use client";
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Badge, Stack, Typography, IconButton } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { UserType } from "../utils/type";
 
 export default function Menu() {
   const navigate = useNavigate();
-  const [bookingHistory, setBookingHistory] = useState<UserType[] | null>(null);
-
-  useEffect(() => {
-    const cartLocalStorage = JSON.parse(
-      localStorage.getItem("bookingList") || "[]"
-    );
-    setBookingHistory(cartLocalStorage);
-  }, []);
 
   const handleHomeRoute = () => {
     navigate("/");

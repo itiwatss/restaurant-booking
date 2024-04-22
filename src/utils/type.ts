@@ -13,6 +13,7 @@ export interface BookingType {
 }
 
 export interface UserType {
+  id: number
   name: string
   booking: BookingType
 }

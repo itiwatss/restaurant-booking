@@ -5,15 +5,15 @@ import { RestaurantType, initialList } from "../../utils/type";
 import RestaurantCard from "../../components/RestaurantCard";
 import { Stack, TextField, Grid } from "@mui/material";
 
-
 export default function Home() {
   const [search, setSearch] = useState("");
 
-  const [restaurantList, setRautaurantList] = useState<RestaurantType[] | []>(initialList);
+  const [restaurantList, setRautaurantList] = useState<RestaurantType[] | []>(
+    initialList
+  );
 
   const printValue = _.debounce((value: string) => {
     setSearch(value);
-    console.log(value);
     if (value === "") {
       setRautaurantList(initialList);
     } else {

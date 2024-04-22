@@ -1,12 +1,29 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button, Stack, Typography, Card, Link } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import dayjs from "dayjs";
 import { UserType } from "../../utils/type";
 
 export default function BookingHistory() {
-  const [bookingHistory, setBookingHistory] = useState<UserType[] | null>(null);
+  const navigate = useNavigate();
+  const [bookingHistory, setBookingHistory] = useState<UserType[] | undefined>(
+    undefined
+  );
+
+  const refreshPage = () => {
+    navigate(0);
+  };
+
+  const handleDelete = (selected: UserType) => {
+    const newBookingHistory = bookingHistory?.filter(
+      (e) => e.id !== selected.id
+    );
+    setBookingHistory(newBookingHistory);
+    localStorage.setItem("bookingList", JSON.stringify(newBookingHistory));
+    refreshPage();
+  };
   useEffect(() => {
     const cartLocalStorage = JSON.parse(
       localStorage.getItem("bookingList") || "[]"
@@ -25,9 +42,10 @@ export default function BookingHistory() {
     >
       <Typography variant="h6">Manage my bookings</Typography>
       <Typography variant="h6">upcoming</Typography>
-      {bookingHistory?.map((e: UserType) => {
+      {bookingHistory?.map((e: UserType, index: number) => {
         return (
           <Card
+            key={index}
             sx={{
               border: "1px solid black",
             }}
@@ -66,15 +84,28 @@ export default function BookingHistory() {
                   >
                     {e.name}
                   </Link>
-                  <Typography variant="body1">Name: {e.booking?.name}</Typography>
-                  <Typography variant="body1">Table size: {e.booking?.size} people</Typography>
-                  <Typography variant="body1">Date: {dayjs(e.booking?.dateTime).format('DD/MM/YYYY')}</Typography>
-                  <Typography variant="body1">Time: {dayjs(e.booking?.dateTime).format('HH:mm')}</Typography>
+                  <Typography variant="body1">
+                    Name: {e.booking?.name}
+                  </Typography>
+                  <Typography variant="body1">
+                    Table size:{" "}
+                    {e.booking?.size === 4
+                      ? `${e.booking?.size}+`
+                      : e.booking?.size}{" "}
+                    people
+                  </Typography>
+                  <Typography variant="body1">
+                    Date: {dayjs(e.booking?.dateTime).format("DD/MM/YYYY")}
+                  </Typography>
+                  <Typography variant="body1">
+                    Time: {dayjs(e.booking?.dateTime).format("HH:mm")}
+                  </Typography>
                 </Stack>
               </Stack>
               <Stack direction={"row"} pr={2}>
                 <Button
                   variant="outlined"
+                  onClick={() => handleDelete(e)}
                   sx={{
                     minWidth: "48px",
                     minHeight: "48px",
