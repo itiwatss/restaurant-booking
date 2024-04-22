@@ -4,7 +4,7 @@ import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import { ThemeProvider, createTheme } from "@mui/material";
 import { RouterProvider } from "react-router-dom";
-import router from './route'
+import router from "./route";
 
 // Apply font in MUI
 const theme = createTheme({
@@ -21,7 +21,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <ThemeProvider theme={theme}>
     <React.StrictMode>
-      <RouterProvider router={router} />
+        <RouterProvider router={router} />
     </React.StrictMode>
   </ThemeProvider>
 );

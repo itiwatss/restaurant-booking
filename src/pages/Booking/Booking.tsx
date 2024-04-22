@@ -1,10 +1,11 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Dayjs } from "dayjs";
 import { useNavigate } from "react-router-dom";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { RestaurantType } from "../../utils/type";
 import {
   Button,
   Stack,
@@ -25,17 +26,32 @@ import { SelectChangeEvent } from "@mui/material/Select";
 
 export default function Booking() {
   const navigate = useNavigate();
-  const [name, setName] = useState("");
-  const [time, setTime] = useState("");
-  const [quantity, setQuantity] = useState<string | null>("");
+  const [name, setName] = useState<string>("");
+  const [quantity, setQuantity] = useState<number | null>(0);
+  const [time, setTime] = useState<string>("");
   const [date, setDate] = useState<Dayjs | null>(null);
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
+  const [selected, setSelected] = useState<RestaurantType | null>(null);
 
   const handleOpen = () => {
     setOpen(true);
   };
 
   const handleSubmit = () => {
+    const cartLocalStorage = JSON.parse(
+      localStorage.getItem("bookingList") || "[]"
+    );
+    cartLocalStorage.push({
+      name: selected?.name,
+      booking: {
+        name: name,
+        size: quantity,
+        dateTime: date?.toDate(),
+      },
+    });
+    localStorage.setItem("bookingList", JSON.stringify(cartLocalStorage));
+
+    console.log("🚀 ~ handleSubmit ~ cartLocalStorage:", cartLocalStorage);
     navigate("/");
     setOpen(false);
   };
@@ -54,6 +70,10 @@ export default function Booking() {
     setName(e.target.value);
   };
 
+  useEffect(() => {
+    setSelected(JSON.parse(localStorage.getItem("selected") || "[]"));
+  }, []);
+
   return (
     <Stack
       direction={"column"}
@@ -64,7 +84,7 @@ export default function Booking() {
       py={2}
       spacing={2}
     >
-      <Typography variant="h6">Make a booking for Tasty Bites</Typography>
+      <Typography variant="h6">Make a booking for {selected?.name}</Typography>
       <Stack direction={"column"} spacing={2}>
         <Typography variant="body1">Name</Typography>
         <TextField
@@ -82,10 +102,10 @@ export default function Booking() {
         <Grid container>
           <Grid item xs={6} md={3} pr={0.5}>
             <ToggleButton
-              value="1"
-              selected={quantity === "1"}
+              value={1}
+              selected={quantity === 1}
               onChange={() => {
-                setQuantity("1");
+                setQuantity(1);
               }}
               sx={{
                 width: { xs: "100%", md: "200px" },
@@ -97,10 +117,10 @@ export default function Booking() {
           </Grid>
           <Grid item xs={6} md={3} pl={0.5}>
             <ToggleButton
-              value="2"
-              selected={quantity === "2"}
+              value={2}
+              selected={quantity === 2}
               onChange={() => {
-                setQuantity("2");
+                setQuantity(2);
               }}
               sx={{
                 width: { xs: "100%", md: "200px" },
@@ -118,10 +138,10 @@ export default function Booking() {
             pt={{ xs: 1, md: 0 }}
           >
             <ToggleButton
-              value="3"
-              selected={quantity === "3"}
+              value={3}
+              selected={quantity === 3}
               onChange={() => {
-                setQuantity("3");
+                setQuantity(3);
               }}
               sx={{
                 width: { xs: "100%", md: "200px" },
@@ -140,10 +160,10 @@ export default function Booking() {
             pt={{ xs: 1, md: 0 }}
           >
             <ToggleButton
-              value="4+"
-              selected={quantity === "4+"}
+              value={4}
+              selected={quantity === 4}
               onChange={() => {
-                setQuantity("4+");
+                setQuantity(4);
               }}
               sx={{
                 width: { xs: "100%", md: "200px" },
@@ -204,7 +224,7 @@ export default function Booking() {
         </DialogTitle>
         <DialogContent>
           <Stack direction={"column"} spacing={1}>
-            <Typography variant="body1">Restaurant name</Typography>
+            <Typography variant="body1">{selected?.name}</Typography>
             <Typography variant="body1">Name: {name}</Typography>
             <Typography variant="body1">Table size: {quantity}</Typography>
             <Typography variant="body1">Time: {time}</Typography>

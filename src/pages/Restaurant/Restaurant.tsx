@@ -1,9 +1,20 @@
 "use client";
-import { useNavigate } from "react-router-dom";
-import { Stack, Typography, Button } from "@mui/material";
+import { useNavigate, useParams } from "react-router-dom";
+import { Stack, Typography, Button, Grid } from "@mui/material";
+import { RestaurantType, initialList } from "../../utils/type";
+import { useEffect, useState } from "react";
 
 export default function Restaurant() {
   const navigate = useNavigate();
+  let { id } = useParams();
+  const [restaurant, setRestaurant] = useState<RestaurantType | undefined>(
+    undefined
+  );
+
+  useEffect(() => {
+    const foundRestaurant = initialList.find((e) => e.id === id);
+    setRestaurant(foundRestaurant);
+  }, [id]);
 
   return (
     <>
@@ -17,52 +28,68 @@ export default function Restaurant() {
         spacing={2}
         justifyContent={"space-between"}
       >
-        <img
-          src={"https://picsum.photos/300"}
-          alt=""
-          width={"100%"}
-          height={"300"}
-        />
-        <Typography variant="h6">Tasty Bites</Typography>
-        <Typography variant="body1" color={'#868e96'}>
-          A cozy restaurant serving delicious dishes.
+        <Stack
+          sx={{
+            width: "100%",
+            height: { xs: "100%", md: 300 },
+          }}
+        >
+          <img
+            src={restaurant?.photos[0]}
+            alt=""
+            width={"100%"}
+            height={"100%"}
+            style={{
+              aspectRatio: "16 / 9",
+            }}
+          />
+        </Stack>
+
+        <Typography variant="h6">{restaurant?.name}</Typography>
+        <Typography variant="body1" color={"#868e96"}>
+          {restaurant?.description}
         </Typography>
 
         <Typography variant="h6">Photos</Typography>
-        <Stack direction={"row"} spacing={2}>
-          <img
-            src={"https://picsum.photos/300"}
-            alt=""
-            width={200}
-            height={200}
-          />
-          <img
-            src={"https://picsum.photos/300"}
-            alt=""
-            width={200}
-            height={200}
-          />
-        </Stack>
-      </Stack>
-      <Stack
-        direction={"column"}
-        justifyContent={"flex-end"}
-        alignItems={"center"}
-        sx={{
-          position: 'sticky',
-          pb: 2
-        }}
-      >
-        <Button
-          variant="contained"
+        <Grid container>
+          {restaurant?.photos.map((e, index) => {
+            return (
+              <Grid key={index} item xs={2} md={2} mr={{ xs: 1, md: 2 }}>
+                <Stack
+                  sx={{
+                    width: { xs: "100%", md: 200 },
+                    height: { xs: 100, md: 200 },
+                  }}
+                >
+                  <img src={e} alt="" />
+                </Stack>
+              </Grid>
+            );
+          })}
+        </Grid>
+        <Stack
+          direction={"column"}
+          justifyContent={"flex-end"}
+          alignItems={"center"}
           sx={{
-            textTransform: "none",
-            width: "200px",
+            position: { xs: "sticky", md: "relative" },
+            pb: 2,
           }}
-          onClick={() => navigate("/booking")}
         >
-          Make a booking
-        </Button>
+          <Button
+            variant="contained"
+            sx={{
+              textTransform: "none",
+              width: "200px",
+            }}
+            onClick={() => {
+              localStorage.setItem("selected", JSON.stringify(restaurant));
+              navigate("/booking");
+            }}
+          >
+            Make a booking
+          </Button>
+        </Stack>
       </Stack>
     </>
   );

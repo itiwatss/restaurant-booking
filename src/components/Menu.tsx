@@ -1,10 +1,20 @@
 "use client";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Stack, Typography, IconButton } from "@mui/material";
+import { Button, Badge, Stack, Typography, IconButton } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { UserType } from "../utils/type";
 
 export default function Menu() {
   const navigate = useNavigate();
+  const [bookingHistory, setBookingHistory] = useState<UserType[] | null>(null);
+
+  useEffect(() => {
+    const cartLocalStorage = JSON.parse(
+      localStorage.getItem("bookingList") || "[]"
+    );
+    setBookingHistory(cartLocalStorage);
+  }, []);
 
   const handleHomeRoute = () => {
     navigate("/");
@@ -18,7 +28,7 @@ export default function Menu() {
     <Stack
       direction={"row"}
       justifyContent={"space-between"}
-      alignItems={'center'}
+      alignItems={"center"}
       px={{
         xs: 3,
         md: 15,
@@ -54,20 +64,32 @@ export default function Menu() {
         }}
         onClick={handleBookingRoute}
       >
-        manage booking
+        manage booking{" "}
+        {JSON.parse(localStorage.getItem("bookingList") || "[]").length > 0 &&
+          `(${JSON.parse(localStorage.getItem("bookingList") || "[]").length})`}
       </Button>
 
-      <IconButton sx={{
-        display: {
-            xs: 'block',
-            md: 'none'
-        }
-      }}>
-        <AccountCircleIcon
-          sx={{
-            fontSize: "32px",
-          }}
-        />
+      <IconButton
+        sx={{
+          display: {
+            xs: "block",
+            md: "none",
+          },
+        }}
+        onClick={handleBookingRoute}
+      >
+        <Badge
+          badgeContent={
+            JSON.parse(localStorage.getItem("bookingList") || "[]").length
+          }
+          color="primary"
+        >
+          <AccountCircleIcon
+            sx={{
+              fontSize: "32px",
+            }}
+          />
+        </Badge>
       </IconButton>
     </Stack>
   );
